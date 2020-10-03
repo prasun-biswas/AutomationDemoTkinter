@@ -3,6 +3,7 @@ import GlobalVariables
 
 class WSFunctions:
 
+#hello
     @staticmethod
     def loadBallinContainer(number,my_canvas):
         store_ball_objects=[]
