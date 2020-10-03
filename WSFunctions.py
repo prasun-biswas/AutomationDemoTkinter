@@ -43,10 +43,4 @@ class WSFunctions:
             countX+=1
         # my_canvas.move(tag,disX,disX)
 
-    # @staticmethod
-    # def changeSprayColor(Sp,window):
-    #     #     Sp = GlobalVariables.starting_pos[0]
-    #     if(Sp>300 and Sp<400 ):
-    #         rect_spray1.changeOwnColor("red")
-    #     else:
-    #         rect_spray1.changeOwnColor("yellow")
+

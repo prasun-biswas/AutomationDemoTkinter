@@ -10,7 +10,7 @@ class Rectangle:
     def runConveyorX(self, ip_Ball, window):
 
         coordinates = self.canvas.coords(self.image)
-        print(coordinates)
+        # print(coordinates)
         ip_Ball.moveBall_X(window,coordinates[2]-coordinates[0],1)
 
     def runConveyorY(self, ip_Ball, window):

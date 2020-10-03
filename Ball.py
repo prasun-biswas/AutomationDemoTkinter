@@ -13,7 +13,6 @@ class Ball:
         count =0
         while (count<distance):
             self.canvas.move(self.image,xVel,0)
-            # WSFunctions.changeSprayColor(self.canvas.coords(self.image)[0],window)
             window.update()
             time.sleep(0.01)
             count+=1
@@ -24,10 +23,10 @@ class Ball:
         relative_distance = abs(distance-coordinates[3])
         while(count<relative_distance):
             self.canvas.move(self.image,0,yVel)
-            # GlobalVariables.starting_Pos= self.canvas.coords(self.image)
             window.update()
             time.sleep(0.01)
             count+=1
+
 
     def changeBallColor(self,color):
         self.canvas.itemconfig(self.image,fill = color)
