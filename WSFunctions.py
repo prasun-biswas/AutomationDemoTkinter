@@ -1,5 +1,4 @@
 from Ball import *
-import GlobalVariables
 
 class WSFunctions:
 
@@ -37,7 +36,6 @@ class WSFunctions:
 
     @staticmethod
     def moveMultipleObject(window, my_canvas,tag,disX,disY):
-
         countX = 0
         while (countX<disX):
             my_canvas.move(tag,1,0)

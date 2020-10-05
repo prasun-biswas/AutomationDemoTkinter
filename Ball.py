@@ -1,7 +1,6 @@
 import time
-import GlobalVariables
 class Ball:
-
+    Running = True
     def __init__(self,canvas,x,y,diameter,xVelocity,yVelocity,color,tag):
         self.canvas = canvas
         self.image = canvas.create_oval(x,y,x+diameter,y+diameter,fill=color, tags=tag)
@@ -16,6 +15,8 @@ class Ball:
             window.update()
             time.sleep(0.01)
             count+=1
+            if(not self.Running):
+                break
 #hello
     def moveBall_Y(self,window, distance,yVel):
         count = 0

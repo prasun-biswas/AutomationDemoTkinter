@@ -61,11 +61,20 @@ Radiobutton(frame_Package,text ="2", variable =pack, value=2, command = setBoxSi
 Radiobutton(frame_Package,text ="3", variable =pack, value=3, command = setBoxSize).grid(row = 3)
 
 # start and stop button
+processRunning = True
 def startProcess():
+    global processRunning
+    processRunning = True
+    Ball.Running = True
+    button_Start["state"]=DISABLED
     processInSequence()
 
 def stopProcess():
-    pass
+    global processRunning
+    Ball.Running= False
+    processRunning=False
+    button_Start["state"]=NORMAL
+
 
 
 button_Start = Button(frame_Button, text = "Start",fg = "olive drab",padx= 20, pady = 20,bd= 5, command =startProcess )
@@ -75,23 +84,36 @@ button_Stop.grid(row = 1, column =0,sticky=W+E+N+S)
 
 
 # display status of the workstation
-conv_rect1 = Label(frame_Display,bg = "linen",fg ="black", bd=3,padx = 5, pady = 5,relief=GROOVE,text ="Conveyor 1")
+conv_rect1 = Label(frame_Display,bg = "white",fg ="black", bd=3,padx = 5, pady = 5,relief=GROOVE,text ="Conveyor 1")
 conv_rect1.grid(row = 0, column = 0,sticky=W+E+N+S)
-conv_rect2 = Label(frame_Display,bg = "linen",fg ="black",bd=3, padx = 5, pady = 5,relief=GROOVE,text ="Conveyor 2")
+conv_rect2 = Label(frame_Display,bg = "white",fg ="black",bd=3, padx = 5, pady = 5,relief=GROOVE,text ="Conveyor 2")
 conv_rect2.grid(row = 1, column = 0,sticky=W+E+N+S)
-conv_rect1_end = Label(frame_Display,bg = "linen",fg ="black", bd=3,padx = 5, pady = 5,relief=GROOVE,text ="Base Coating")
+conv_rect1_end = Label(frame_Display,bg = "white",fg ="black", bd=3,padx = 5, pady = 5,relief=GROOVE,text ="Base Coating")
 conv_rect1_end.grid(row = 0, column = 1,sticky=W+E+N+S)
-conv_rect2_end = Label(frame_Display,bg = "linen",fg ="black", bd=3,padx = 5, pady = 5,relief=GROOVE,text ="Main Coating")
+conv_rect2_end = Label(frame_Display,bg = "white",fg ="black", bd=3,padx = 5, pady = 5,relief=GROOVE,text ="Main Coating")
 conv_rect2_end.grid(row = 1, column = 1,sticky=W+E+N+S)
-conv_rect_spray1 = Label(frame_Display,bg = "linen",fg ="black", bd=3,padx = 5, pady = 5,relief=GROOVE,text ="Spray 1")
+conv_rect_spray1 = Label(frame_Display,bg = "white",fg ="black", bd=3,padx = 5, pady = 5,relief=GROOVE,text ="Spray 1")
 conv_rect_spray1.grid(row = 0, column = 2,sticky=W+E+N+S)
-conv_rect_spray2 = Label(frame_Display,bg = "linen",fg ="black",bd=3, padx = 5, pady = 5,relief=GROOVE,text ="Spray 2")
+conv_rect_spray2 = Label(frame_Display,bg = "white",fg ="black",bd=3, padx = 5, pady = 5,relief=GROOVE,text ="Spray 2")
 conv_rect_spray2.grid(row = 1, column = 2,sticky=W+E+N+S)
-conv_rect_unloader = Label(frame_Display,bg = "linen",fg ="black",bd=3, padx = 5, pady = 5,relief=GROOVE,text ="Unloading")
+conv_rect_unloader = Label(frame_Display,bg = "white",fg ="black",bd=3, padx = 5, pady = 5,relief=GROOVE,text ="Unloading")
 conv_rect_unloader.grid(row = 0, column = 3,sticky=W+E+N+S)
-conv_packing_box = Label(frame_Display,bg = "linen",fg ="black",bd=3, padx = 5, pady = 5,relief=GROOVE,text ="Packing")
+conv_packing_box = Label(frame_Display,bg = "white",fg ="black",bd=3, padx = 5, pady = 5,relief=GROOVE,text ="Packing")
 conv_packing_box.grid(row = 1, column = 3,sticky=W+E+N+S)
 
+def changeLabelColorTimer(item,color,time):
+    if(processRunning):
+        item.configure(item,bg=color)
+        item.after(time,changeLabelColorTimer, item,'white',time)
+
+def startConveyor(rect,ip_Ball,label,time):
+    if(processRunning):
+        changeLabelColorTimer(label,"green",time)
+        rect.runConveyorX(ip_Ball, window)
+
+
+# display_Canvas = Canvas(frame_Display,width =340, height = 160, bg = "white")
+# display_Canvas.grid(row = 0, column = 0)
 # main workstation area as canvas
 my_canvas = Canvas(window,width=WIDTH,height=HEIGHT,bg = "white", bd = 5)
 my_canvas.grid(row = 5, column =0, columnspan = 6)
@@ -111,25 +133,15 @@ rect1_end = Rectangle(my_canvas,300,170,305,220,"yellow","es1")
 rect2 = Rectangle(my_canvas,305,200,500,220,"cyan","ws2")
 rect2_end = Rectangle(my_canvas,500,170,505,220,"green","es2")
 
-
 # my_canvas.itemconfigure(rect_spray1, fill='red')
-
-# this part represents process on conveyer
-
-# item = my_canvas.create_rectangle(50, 25, 150, 75, fill="blue")
-# taskStarted = False
 
 # create balls and store
 
 def startSpray(item,color):
-    my_canvas.itemconfig(item,fill=color)
-    my_canvas.after(1500,startSpray, item,'yellow')
+    if(processRunning):
+        my_canvas.itemconfig(item,fill=color)
+        my_canvas.after(1500,startSpray, item,'yellow')
 # hello
-
-
-
-
-
 
 def turnOnWorkStation():
     count =0
@@ -137,26 +149,34 @@ def turnOnWorkStation():
     store_ball_objects = WSFunctions.loadBallinContainer(int(enter_Number.get()),my_canvas)
     rect_unloader = Rectangle(my_canvas,505,200,525,200+20*pack.get(),"white","ws1") #balls stays in this unloader
     for i in range(int(enter_Number.get())):
+        if(processRunning):
             ip_Ball = store_ball_objects[i]
             rect_loader.runConveyorY(ip_Ball,window)
             my_canvas.after(500,startSpray,rect_spray1,'red')
-            rect1.runConveyorX(ip_Ball, window)
-            rect1_end.runConveyorX(ip_Ball, window)
-            rect1_end.changeObjectColor(ip_Ball,"yellow")
+            changeLabelColorTimer(conv_rect_spray1,"green",1500)
+            startConveyor(rect1,ip_Ball, conv_rect1, 3000)#rect1.runConveyorX(ip_Ball, window)
+            startConveyor(rect1_end,ip_Ball, conv_rect1_end, 500)#rect1_end.runConveyorX(ip_Ball, window)
+            if(processRunning):
+                rect1_end.changeObjectColor(ip_Ball,"yellow")
 
             my_canvas.after(300,startSpray,rect_spray2,'red')
-            rect2.runConveyorX(ip_Ball, window)
-            rect2_end.runConveyorX(ip_Ball, window)
-            rect2_end.changeObjectColor(ip_Ball, coat.get())
+            changeLabelColorTimer(conv_rect_spray2,"green",1500)
+            startConveyor(rect2,ip_Ball, conv_rect2, 2500)#rect2.runConveyorX(ip_Ball, window)
+            startConveyor(rect2_end,ip_Ball, conv_rect2_end, 500)#rect2_end.runConveyorX(ip_Ball, window)
+            if(processRunning):
+                rect2_end.changeObjectColor(ip_Ball, coat.get())
             rect_unloader.runConveyorYToSlot(ip_Ball,window,count)
             count+=1
             if((count==pack.get()) or (i+1==int(enter_Number.get()))):
                 WSFunctions.moveMultipleObject(window,my_canvas,"packed",25,0)
+                changeLabelColorTimer(conv_packing_box,"green",1000)
             if(count==pack.get()):
                 count=0
 
 def processInSequence():
     turnOnWorkStation()
+    button_Start["state"]=NORMAL
+
 
 
 # turnOnWorkStation()
@@ -167,8 +187,6 @@ def processInSequence():
 
 # def printGlobalVarStartingPos():
 #     print("global start pos"+GlobalVariables.starting_Pos)
-
-
 
 window.mainloop()
 
