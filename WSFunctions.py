@@ -9,7 +9,9 @@ class WSFunctions:
         store_ball_objects=[]
         for i in range(number):
             container_Height = 180
-            ball = Ball(my_canvas,220,container_Height-20*i,20,0,0,"white",("ball",str(i),"packed"))
+            # ball = Ball(my_canvas,20,container_Height-20*i,20,0,0,"white",("ball",str(i),"packed"))
+            ball = Ball(my_canvas,20,container_Height-20*i,20,0,0,"white",("ball",str(i)))
+
             store_ball_objects.append(ball)
         return store_ball_objects
 

@@ -29,8 +29,8 @@ class Ball:
 
 
     def changeBallColor(self,color):
-        self.canvas.itemconfig(self.image,fill = color)
-
+        # self.canvas.itemconfig(self.image,fill = color)
+        self.canvas.itemconfig(self.image,fill = color, tags=("packed"))
 
 
 
