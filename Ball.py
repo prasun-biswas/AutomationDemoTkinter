@@ -17,7 +17,7 @@ class Ball:
             count+=1
             if(not self.Running):
                 break
-#hello
+
     def moveBall_Y(self,window, distance,yVel):
         count = 0
         coordinates = self.canvas.coords(self.image)
@@ -27,11 +27,12 @@ class Ball:
             window.update()
             time.sleep(0.01)
             count+=1
-
+            if(not self.Running):
+                    self.canvas.itemconfig(self.image, tags=("fault")) #remove ball from the conveyer with tag "fault"
+            else:
+                    self.canvas.itemconfig(self.image, tags=("packed")) #unload ball with tag "packed"
 
     def changeBallColor(self,color):
-        # self.canvas.itemconfig(self.image,fill = color)
-        self.canvas.itemconfig(self.image,fill = color, tags=("packed"))
-
+        self.canvas.itemconfig(self.image,fill = color)
 
 
