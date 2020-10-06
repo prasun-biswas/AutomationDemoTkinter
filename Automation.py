@@ -120,9 +120,9 @@ Time_label.grid(row = 3, column = 0, rowspan= 2,columnspan = 3,sticky=W+E+N+S)
 def changeLabelColorTimer(item,color,time):
     """ this method changes label (display LED)color to show active process status
     here item can be any widget """
-    if(processRunning):
-        item.configure(item,bg=color)
-        item.after(time,changeLabelColorTimer, item,'white',time)
+    # if(processRunning):
+    item.configure(item,bg=color)
+    item.after(time,changeLabelColorTimer, item,'white',time)
 
 def startConveyor(rect,ip_Ball,label,time):
     """ for the conveyor(1 and 2), coating(base and main) this function turns on the
