@@ -1,6 +1,5 @@
 from tkinter import *
 from Ball import *
-from testFunction_1 import Timer
 from Rectangle import *
 from WSFunctions import *
 import time
